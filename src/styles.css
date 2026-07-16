@@ -3,37 +3,43 @@
 }
 
 :root {
-  --bg: #f8f5ff;
+  --bg: #eef1f8;
+  --bg-gradient: linear-gradient(135deg, #eef1f8 0%, #e4e9fb 100%);
   --surface: #ffffff;
-  --text-primary: #111111;
-  --text-secondary: #9b98ad;
-  --text-accent: #ff4b7b;
-  --accent: #885df1;
-  --accent-hover: #744ce0;
-  --input-bg: #f7f4fc;
-  --input-text: #5b5967;
-  --divider: #f1edf8;
-  --shadow: rgba(65, 46, 112, 0.12);
+  --text-primary: #1a1a2e;
+  --text-secondary: #767693;
+  --text-accent: #ff5c8a;
+  --accent: #6c5ce7;
+  --accent-2: #a29bfe;
+  --accent-hover: #5a4bd4;
+  --input-bg: #f4f5fb;
+  --input-text: #4a4a63;
+  --divider: #eceefa;
+  --shadow: rgba(76, 60, 140, 0.15);
+  --badge-bg: linear-gradient(135deg, #6c5ce7, #a29bfe);
 }
 
 [data-theme="dark"] {
-  --bg: #14121c;
-  --surface: #1e1b29;
-  --text-primary: #f2f0f8;
-  --text-secondary: #a29fb5;
-  --text-accent: #ff6f93;
-  --accent: #a687f8;
-  --accent-hover: #9270f2;
-  --input-bg: #292534;
-  --input-text: #e5e2ee;
-  --divider: #322d40;
+  --bg: #0f0e1a;
+  --bg-gradient: linear-gradient(135deg, #0f0e1a 0%, #181630 100%);
+  --surface: #1c1a2e;
+  --text-primary: #f1f0fa;
+  --text-secondary: #9491b4;
+  --text-accent: #ff7fa3;
+  --accent: #9b8cff;
+  --accent-2: #7d6df0;
+  --accent-hover: #b3a5ff;
+  --input-bg: #26243c;
+  --input-text: #e8e6f7;
+  --divider: #2e2b48;
   --shadow: rgba(0, 0, 0, 0.5);
+  --badge-bg: linear-gradient(135deg, #7d6df0, #9b8cff);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background: var(--bg-gradient);
   color: var(--text-primary);
   font-family: "Roboto", Arial, sans-serif;
   display: grid;
@@ -43,42 +49,42 @@ body {
 }
 
 .weather-app {
-  width: min(824px, 100%);
+  width: min(760px, 100%);
   background: var(--surface);
-  border-radius: 14px;
-  box-shadow: 0 30px 70px var(--shadow);
-  padding: 38px 36px 42px;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px var(--shadow);
+  padding: 32px 34px 36px;
   transition: background 200ms ease, box-shadow 200ms ease;
 }
 
 header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .search-form {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 112px;
-  gap: 12px;
+  grid-template-columns: 1fr 108px;
+  gap: 10px;
 }
 
 .search-input,
 .search-button {
   border: 0;
-  border-radius: 6px;
+  border-radius: 999px;
   font: inherit;
-  min-height: 70px;
+  min-height: 56px;
 }
 
 .search-input {
   background: var(--input-bg);
   color: var(--input-text);
-  font-size: 20px;
-  padding: 0 25px;
+  font-size: 17px;
+  padding: 0 22px;
   outline: 2px solid transparent;
-  transition: background 200ms ease, color 200ms ease;
+  transition: background 200ms ease, color 200ms ease, outline-color 150ms ease;
 }
 
 .search-input:focus {
@@ -86,20 +92,22 @@ header {
 }
 
 .search-button {
-  background: var(--accent);
+  background: var(--badge-bg);
   color: #ffffff;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
-  transition: background 160ms ease, transform 160ms ease;
+  letter-spacing: 0.2px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
 .search-button:hover {
-  background: var(--accent-hover);
+  box-shadow: 0 8px 20px var(--shadow);
+  transform: translateY(-1px);
 }
 
 .search-button:active {
-  transform: translateY(1px);
+  transform: translateY(0);
 }
 
 .theme-toggle {
@@ -108,43 +116,44 @@ header {
   justify-content: center;
   background: var(--input-bg);
   border: 0;
-  border-radius: 6px;
+  border-radius: 50%;
   color: var(--text-primary);
-  width: 70px;
-  height: 70px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
   cursor: pointer;
-  transition: background 160ms ease, transform 160ms ease;
+  transition: background 160ms ease, transform 200ms ease;
 }
 
 .theme-toggle:hover {
-  background: var(--divider);
-  transform: translateY(-1px);
+  transform: rotate(-14deg);
 }
 
 .current-weather {
-  border-bottom: 1px solid var(--divider);
-  border-top: 1px solid var(--divider);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 28px;
-  margin-top: 38px;
-  padding: 40px 0 58px;
-  transition: border-color 200ms ease;
+  gap: 24px;
+  margin-top: 30px;
+  padding: 30px 26px;
+  border-radius: 20px;
+  background: var(--input-bg);
+  transition: background 200ms ease;
 }
 
 .current-city {
-  font-size: 48px;
-  line-height: 1.1;
-  margin: 0 0 22px;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 14px;
   overflow-wrap: anywhere;
+  letter-spacing: -0.5px;
 }
 
 .current-details {
   color: var(--text-secondary);
-  font-size: 20px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -154,41 +163,45 @@ header {
 
 .status-message {
   color: var(--text-accent);
-  font-size: 16px;
-  margin: 12px 0 0;
-  min-height: 20px;
+  font-size: 14px;
+  margin: 10px 0 0;
+  min-height: 18px;
 }
 
 .current-temperature {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-shrink: 0;
-  gap: 12px;
+  gap: 14px;
+  background: var(--badge-bg);
+  padding: 18px 26px;
+  border-radius: 18px;
+  color: #ffffff;
 }
 
 .current-temperature-icon {
-  font-size: 52px;
-  line-height: 1.5;
+  font-size: 38px;
+  line-height: 1;
 }
 
 .current-temperature-value {
-  font-size: 100px;
+  font-size: 56px;
   font-weight: 900;
-  line-height: 0.95;
+  line-height: 1;
 }
 
 .current-temperature-unit {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.2;
-  margin-top: 7px;
+  align-self: flex-start;
+  margin-top: 4px;
 }
 
 footer {
   color: var(--text-secondary);
-  font-size: 20px;
-  line-height: 1.5;
-  padding-top: 34px;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 26px;
   text-align: center;
 }
 
@@ -198,6 +211,7 @@ footer p {
 
 a {
   color: var(--accent);
+  font-weight: 500;
 }
 
 @media (max-width: 680px) {
@@ -206,7 +220,8 @@ a {
     padding: 18px;
   }
   .weather-app {
-    padding: 24px 20px 30px;
+    padding: 22px 18px 26px;
+    border-radius: 18px;
   }
   header {
     flex-wrap: wrap;
@@ -222,26 +237,21 @@ a {
   }
   .search-input,
   .search-button {
-    min-height: 58px;
-  }
-  .theme-toggle {
-    width: 58px;
-    height: 58px;
+    min-height: 50px;
   }
   .current-weather {
     align-items: flex-start;
     flex-direction: column;
-    margin-top: 28px;
-    padding: 32px 0 40px;
+    padding: 22px 18px;
   }
   .current-city {
-    font-size: 40px;
+    font-size: 30px;
   }
-  .current-details,
-  footer {
-    font-size: 17px;
+  .current-temperature {
+    width: 100%;
+    justify-content: center;
   }
   .current-temperature-value {
-    font-size: 82px;
+    font-size: 44px;
   }
 }
