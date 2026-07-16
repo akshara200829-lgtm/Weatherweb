@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/styles.css" />
+    <title>My weather application</title>
+  </head>
+  <body>
+    <div class="weather-app">
+      <header>
+        <form id="search-form" class="search-form">
+          <input
+            type="search"
+            placeholder="Enter a city.."
+            required
+            class="search-input"
+            id="search-input"
+            autocomplete="off"
+          />
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </header>
+
+      <main>
+        <section class="current-weather" aria-live="polite">
+          <div>
+            <h1 class="current-city" id="current-city">Paris</h1>
+            <p class="current-details">
+              <span id="current-date">Thursday 21:11</span>,
+              <span id="current-description">moderate rain</span><br />
+              Humidity: <strong id="current-humidity">87%</strong>, Wind:
+              <strong id="current-wind">7.2km/h</strong>
+            </p>
+            <p class="status-message" id="status-message"></p>
+          </div>
+
+          <div class="current-temperature">
+            <span class="current-temperature-icon" id="current-icon">☀️</span>
+            <span class="current-temperature-value" id="current-temperature"
+              >24</span
+            >
+            <span class="current-temperature-unit">°C</span>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          This project was coded by
+          <a href="#" target="_blank" rel="noreferrer">Akshara S Kumar</a>
+          and is
+          <a href="#" target="_blank" rel="noreferrer">on GitHub</a> and
+          <a href="#" target="_blank" rel="noreferrer">hosted on Netlify</a>.
+        </p>
+      </footer>
+    </div>
+
+    <script src="src/index.js"></script>
+  </body>
+</html>
