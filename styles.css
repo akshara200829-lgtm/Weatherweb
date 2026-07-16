@@ -2,26 +2,63 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #f8f5ff;
+  --surface: #ffffff;
+  --text-primary: #111111;
+  --text-secondary: #9b98ad;
+  --text-accent: #ff4b7b;
+  --accent: #885df1;
+  --accent-hover: #744ce0;
+  --input-bg: #f7f4fc;
+  --input-text: #5b5967;
+  --divider: #f1edf8;
+  --shadow: rgba(65, 46, 112, 0.12);
+}
+
+[data-theme="dark"] {
+  --bg: #14121c;
+  --surface: #1e1b29;
+  --text-primary: #f2f0f8;
+  --text-secondary: #a29fb5;
+  --text-accent: #ff6f93;
+  --accent: #a687f8;
+  --accent-hover: #9270f2;
+  --input-bg: #292534;
+  --input-text: #e5e2ee;
+  --divider: #322d40;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f8f5ff;
-  color: #111111;
+  background: var(--bg);
+  color: var(--text-primary);
   font-family: "Roboto", Arial, sans-serif;
   display: grid;
   place-items: center;
   padding: 32px 18px;
+  transition: background 200ms ease, color 200ms ease;
 }
 
 .weather-app {
   width: min(824px, 100%);
-  background: #ffffff;
+  background: var(--surface);
   border-radius: 14px;
-  box-shadow: 0 30px 70px rgba(65, 46, 112, 0.12);
+  box-shadow: 0 30px 70px var(--shadow);
   padding: 38px 36px 42px;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .search-form {
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 112px;
   gap: 12px;
@@ -36,19 +73,20 @@ body {
 }
 
 .search-input {
-  background: #f7f4fc;
-  color: #5b5967;
+  background: var(--input-bg);
+  color: var(--input-text);
   font-size: 20px;
   padding: 0 25px;
   outline: 2px solid transparent;
+  transition: background 200ms ease, color 200ms ease;
 }
 
 .search-input:focus {
-  outline-color: #885df1;
+  outline-color: var(--accent);
 }
 
 .search-button {
-  background: #885df1;
+  background: var(--accent);
   color: #ffffff;
   cursor: pointer;
   font-size: 20px;
@@ -57,22 +95,43 @@ body {
 }
 
 .search-button:hover {
-  background: #744ce0;
+  background: var(--accent-hover);
 }
 
 .search-button:active {
   transform: translateY(1px);
 }
 
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--input-bg);
+  border: 0;
+  border-radius: 6px;
+  color: var(--text-primary);
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.theme-toggle:hover {
+  background: var(--divider);
+  transform: translateY(-1px);
+}
+
 .current-weather {
-  border-bottom: 1px solid #f1edf8;
-  border-top: 1px solid #f1edf8;
+  border-bottom: 1px solid var(--divider);
+  border-top: 1px solid var(--divider);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 28px;
   margin-top: 38px;
   padding: 40px 0 58px;
+  transition: border-color 200ms ease;
 }
 
 .current-city {
@@ -83,18 +142,18 @@ body {
 }
 
 .current-details {
-  color: #9b98ad;
+  color: var(--text-secondary);
   font-size: 20px;
   line-height: 1.5;
   margin: 0;
 }
 
 .current-details strong {
-  color: #ff4b7b;
+  color: var(--text-accent);
 }
 
 .status-message {
-  color: #ff4b7b;
+  color: var(--text-accent);
   font-size: 16px;
   margin: 12px 0 0;
   min-height: 20px;
@@ -126,7 +185,7 @@ body {
 }
 
 footer {
-  color: #9b98ad;
+  color: var(--text-secondary);
   font-size: 20px;
   line-height: 1.5;
   padding-top: 34px;
@@ -138,7 +197,7 @@ footer p {
 }
 
 a {
-  color: #885df1;
+  color: var(--accent);
 }
 
 @media (max-width: 680px) {
@@ -146,36 +205,42 @@ a {
     align-items: start;
     padding: 18px;
   }
-
   .weather-app {
     padding: 24px 20px 30px;
   }
-
+  header {
+    flex-wrap: wrap;
+  }
   .search-form {
     grid-template-columns: 1fr;
+    order: 1;
+    width: 100%;
   }
-
+  .theme-toggle {
+    order: 2;
+    margin-left: auto;
+  }
   .search-input,
   .search-button {
     min-height: 58px;
   }
-
+  .theme-toggle {
+    width: 58px;
+    height: 58px;
+  }
   .current-weather {
     align-items: flex-start;
     flex-direction: column;
     margin-top: 28px;
     padding: 32px 0 40px;
   }
-
   .current-city {
     font-size: 40px;
   }
-
   .current-details,
   footer {
     font-size: 17px;
   }
-
   .current-temperature-value {
     font-size: 82px;
   }
