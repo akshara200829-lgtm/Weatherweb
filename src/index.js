@@ -48,7 +48,8 @@ function formatDate(date) {
 
 function formatDay(dateString) {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat("en", { weekday: "Short" }).format(date);
+  // Fixed: "short" must be lowercase
+  return new Intl.DateTimeFormat("en", { weekday: "short" }).format(date);
 }
 
 function setStatus(message) {
@@ -118,12 +119,12 @@ async function searchCity(city) {
 
   const geoResponse = await fetch(geoUrl);
   if (!geoResponse.ok) {
-    throw new Error("Unable to reach geocoding service.");
+    throw new Error("Unable to connect to location services.");
   }
-  
+
   const geoData = await geoResponse.json();
   if (!geoData.results || geoData.results.length === 0) {
-    throw new Error("City not found. Please try another location.");
+    throw new Error("City not found. Please try another city.");
   }
 
   const place = geoData.results[0];
@@ -136,7 +137,7 @@ async function searchCity(city) {
 
   const weatherData = await weatherResponse.json();
   if (!weatherData.current) {
-    throw new Error("Weather data is currently unavailable.");
+    throw new Error("Weather data unavailable right now.");
   }
 
   const current = weatherData.current;
@@ -147,7 +148,7 @@ async function searchCity(city) {
   dateElement.textContent = formatDate(new Date(current.time));
   descriptionElement.textContent = description;
   humidityElement.textContent = `${Math.round(current.relative_humidity_2m)}%`;
-  windElement.textContent = `${current.wind_speed_10m.toFixed(1)} km/h`;
+  windElement.textContent = `${current.wind_speed_10m.toFixed(1)}km/h`;
   temperatureElement.textContent = Math.round(current.temperature_2m);
   iconElement.textContent = icon;
 
