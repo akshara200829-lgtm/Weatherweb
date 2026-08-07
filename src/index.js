@@ -8,6 +8,7 @@ const windElement = document.querySelector("#current-wind");
 const temperatureElement = document.querySelector("#current-temperature");
 const iconElement = document.querySelector("#current-icon");
 const statusElement = document.querySelector("#status-message");
+const forecastElement = document.querySelector("#forecast");
 
 const themeToggle = document.querySelector("#theme-toggle");
 const moonIcon = document.querySelector("#theme-icon-moon");
@@ -45,8 +46,15 @@ function formatDate(date) {
   }).format(date);
 }
 
+function formatDay(dateString) {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en", { weekday: "Short" }).format(date);
+}
+
 function setStatus(message) {
-  statusElement.textContent = message;
+  if (statusElement) {
+    statusElement.textContent = message;
+  }
 }
 
 function getWeatherDescription(code) {
@@ -55,8 +63,8 @@ function getWeatherDescription(code) {
 
 function applyTheme(theme) {
   root.setAttribute("data-theme", theme);
-  moonIcon.style.display = theme === "dark" ? "none" : "block";
-  sunIcon.style.display = theme === "dark" ? "block" : "none";
+  if (moonIcon) moonIcon.style.display = theme === "dark" ? "none" : "block";
+  if (sunIcon) sunIcon.style.display = theme === "dark" ? "block" : "none";
   localStorage.setItem("weather-app-theme", theme);
 }
 
@@ -66,54 +74,102 @@ const savedTheme =
 
 applyTheme(savedTheme);
 
-themeToggle.addEventListener("click", () => {
-  const nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  applyTheme(nextTheme);
-});
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+  });
+}
+
+function displayForecast(daily) {
+  if (!forecastElement || !daily) return;
+
+  let forecastHtml = `<div class="forecast-container" style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 1.5rem;">`;
+
+  for (let i = 0; i < 5; i++) {
+    const time = daily.time[i];
+    const maxTemp = Math.round(daily.temperature_2m_max[i]);
+    const minTemp = Math.round(daily.temperature_2m_min[i]);
+    const weatherCode = daily.weather_code[i];
+    const [, icon] = getWeatherDescription(weatherCode);
+
+    forecastHtml += `
+      <div class="forecast-day" style="text-align: center;">
+        <div class="forecast-date">${formatDay(time)}</div>
+        <div class="forecast-icon" style="font-size: 1.5rem; margin: 0.2rem 0;">${icon}</div>
+        <div class="forecast-temperatures">
+          <span><strong>${maxTemp}°</strong></span>
+          <span style="opacity: 0.7;">${minTemp}°</span>
+        </div>
+      </div>
+    `;
+  }
+
+  forecastHtml += `</div>`;
+  forecastElement.innerHTML = forecastHtml;
+}
 
 async function searchCity(city) {
   setStatus("Loading weather...");
+  
   const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
     city
   )}&count=1&language=en&format=json`;
+
   const geoResponse = await fetch(geoUrl);
+  if (!geoResponse.ok) {
+    throw new Error("Unable to reach geocoding service.");
+  }
+  
   const geoData = await geoResponse.json();
   if (!geoData.results || geoData.results.length === 0) {
-    throw new Error("City not found. Please try another city.");
+    throw new Error("City not found. Please try another location.");
   }
+
   const place = geoData.results[0];
-  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`;
+  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
+
   const weatherResponse = await fetch(weatherUrl);
+  if (!weatherResponse.ok) {
+    throw new Error("Unable to fetch weather data.");
+  }
+
   const weatherData = await weatherResponse.json();
   if (!weatherData.current) {
-    throw new Error("Weather is unavailable for this city right now.");
+    throw new Error("Weather data is currently unavailable.");
   }
+
   const current = weatherData.current;
   const [description, icon] = getWeatherDescription(current.weather_code);
-  const cityName = place.country
-    ? `${place.name}, ${place.country}`
-    : place.name;
+  const cityName = place.country ? `${place.name}, ${place.country}` : place.name;
+
   cityElement.textContent = cityName;
   dateElement.textContent = formatDate(new Date(current.time));
   descriptionElement.textContent = description;
   humidityElement.textContent = `${Math.round(current.relative_humidity_2m)}%`;
-  windElement.textContent = `${current.wind_speed_10m.toFixed(1)}km/h`;
+  windElement.textContent = `${current.wind_speed_10m.toFixed(1)} km/h`;
   temperatureElement.textContent = Math.round(current.temperature_2m);
   iconElement.textContent = icon;
+
+  if (weatherData.daily) {
+    displayForecast(weatherData.daily);
+  }
+
   setStatus("");
 }
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const city = searchInput.value.trim();
-  if (!city) {
-    return;
-  }
-  try {
-    await searchCity(city);
-  } catch (error) {
-    setStatus(error.message);
-  }
-});
+if (form) {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const city = searchInput.value.trim();
+    if (!city) return;
+
+    try {
+      await searchCity(city);
+    } catch (error) {
+      setStatus(error.message);
+    }
+  });
+}
 
 searchCity("Paris").catch((error) => setStatus(error.message));
