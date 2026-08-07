@@ -9,10 +9,8 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <!-- Axios library for API requests -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="src/styles.css" />
-    <title>My Weather Application</title>
+    <title>My weather application</title>
   </head>
   <body>
     <div class="weather-app">
@@ -52,7 +50,7 @@
       <main>
         <section class="current-weather" aria-live="polite">
           <div class="reading-primary">
-            <p class="reading-eyebrow" id="current-date">Loading date...</p>
+            <p class="reading-eyebrow" id="current-date">--</p>
             <h1 class="current-city" id="current-city">Loading...</h1>
             <p class="current-description" id="current-description">--</p>
             <p class="status-message" id="status-message"></p>
@@ -60,7 +58,7 @@
 
           <div class="reading-temperature">
             <div class="temp-top">
-              <div class="current-temperature-icon" id="current-icon"></div>
+              <span class="current-temperature-icon" id="current-icon">☀️</span>
               <div class="temp-value-row">
                 <span class="current-temperature-value" id="current-temperature">--</span>
                 <span class="current-temperature-unit">°C</span>
@@ -78,11 +76,11 @@
           <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-block">
             <span class="stat-label">Wind</span>
-            <span class="stat-value" id="current-wind">-- km/h</span>
+            <span class="stat-value" id="current-wind">--km/h</span>
           </div>
         </section>
 
-        <!-- Dynamic Forecast Section -->
+        <!-- 5-Day Forecast Section -->
         <section class="weather-forecast" id="forecast"></section>
       </main>
 
